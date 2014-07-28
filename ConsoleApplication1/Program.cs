@@ -7,52 +7,45 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
 
-namespace ConsoleApplication1
+namespace ConsoleApplication
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //** Pull in the file from the server **//
-            //Unzip the file 
+            string path = @"C:\data";
 
-            string[] arrays;
-            String sdira = @"\\csiadSAT07\page_content";
-            arrays = Directory.GetFiles(sdira, "*", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
+            if (File.Exists(path))
+            {
+                // This path is a file
+                ProcessFile(path);
+            }
+            else if (Directory.Exists(path))
+            {
+                // This path is a directory
+                ProcessDirectory(path);
+            }
+            else
+            {
+                Console.WriteLine("{0} is not a valid file or directory.", path);
+            }
+          
 
-            //foreach (string s in arrays) {
-                //System.Console.WriteLine(s);
+            //****DECODE 64****//
+            byte[] data = Convert.FromBase64String("H4sIAAAAAAAA/6tWykxRslIyMjAwVNJRKsgrCkotLs0pKVayio6t5QIABYyPeB4AAAA=");
 
+            //** Decompress**//
+            byte[] decompress = Decompress(data);
 
-                byte[] input = File.ReadAllBytes(@"\\csiadSAT07\page_content\20140720_17_ia1cid01_3_page_content_tran.bcp.gz");
+            /** Convert to a string **/
+            string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
 
-                Console.WriteLine("BEFORE DECOMPRESS*****************");
-                byte[] decomp = Decompress(input);
+            /** Write to console **/
+            System.Console.WriteLine(text);
 
-                
-                string xn = System.Text.Encoding.UTF8.GetString(decomp);
-                Debug.WriteLine(xn);
-
-
-                //****DECODE 64****//
-                //byte[] data = Convert.FromBase64String("H4sIAAAAAAAA/6tWykxRslIyMjAwVNJRKsgrCkotLs0pKVayio6t5QIABYyPeB4AAAA=");
-
-                //** Decompress**//
-               // byte[] decompress = Decompress(data);
-
-                /** Convert to a string **/
-                //string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
-
-                /** Write to console **/
-               // System.Console.WriteLine(text);
-
-           // }
-
-            System.Console.ReadLine(); 
+            System.Console.ReadLine();
         }
 
-
-        //** METHOD TO DECOMPRESS THE GZIP **//
         static byte[] Decompress(byte[] gzip)
         {
             using (GZipStream stream = new GZipStream(new MemoryStream(gzip),
@@ -75,8 +68,48 @@ namespace ConsoleApplication1
                     return memory.ToArray();
                 }
             }
+
         }
 
+        // Process all files in the directory passed in, recurse on any directories  
+        // that are found, and process the files they contain. 
+        public static void ProcessDirectory(string targetDirectory)
+        {
+            // Process the list of files found in the directory. 
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            foreach (string fileName in fileEntries)
+                ProcessFile(fileName);
 
+            // Recurse into subdirectories of this directory. 
+            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            foreach (string subdirectory in subdirectoryEntries)
+                ProcessDirectory(subdirectory);
+        }
+
+        // Insert logic for processing found files here. 
+        public static void ProcessFile(string path)
+        {
+            FileInfo fileToDecompress = new FileInfo(path);
+            Decompress(fileToDecompress);
+            Console.WriteLine("Processed file '{0}'.", path);
+        }
+
+        public static void Decompress(FileInfo fileToDecompress)
+        {
+            using (FileStream originalFileStream = fileToDecompress.OpenRead())
+            {
+                string currentFileName = fileToDecompress.FullName;
+                string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+                using (FileStream decompressedFileStream = File.Create(newFileName))
+                {
+                    using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedFileStream);
+                        Console.WriteLine("Decompressed: {0}", fileToDecompress.Name);
+                    }
+                }
+            }
+        }
     }
 }
