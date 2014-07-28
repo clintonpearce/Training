@@ -29,21 +29,6 @@ namespace ConsoleApplication
             {
                 Console.WriteLine("{0} is not a valid file or directory.", path);
             }
-          
-
-            //****DECODE 64****//
-            byte[] data = Convert.FromBase64String("H4sIAAAAAAAA/6tWykxRslIyMjAwVNJRKsgrCkotLs0pKVayio6t5QIABYyPeB4AAAA=");
-
-            //** Decompress**//
-            byte[] decompress = Decompress(data);
-
-            /** Convert to a string **/
-            string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
-
-            /** Write to console **/
-            System.Console.WriteLine(text);
-
-            System.Console.ReadLine();
         }
 
         static byte[] Decompress(byte[] gzip)
@@ -101,9 +86,21 @@ namespace ConsoleApplication
             while ( counter >0 && (line = file.ReadLine()) != null)
             {
                 counter--;
-                
+
+                // Split line by tab delimiter
                 String[] columns = line.Split('\t');
-                Console.WriteLine(columns[15]);
+
+                //****DECODE 64****//
+                byte[] data = Convert.FromBase64String(columns[15]);
+
+                //** Decompress**//
+                byte[] decompress = Decompress(data);
+
+                /** Convert to a string **/
+                string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
+
+                /** Write to console **/
+                Console.WriteLine(text);
             }
             
 
