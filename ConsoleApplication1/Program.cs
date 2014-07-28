@@ -13,21 +13,46 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            //****DECODE 64****//
-            byte[] data = Convert.FromBase64String("H4sIAAAAAAAA/6tWykxRslIyMjAwVNJRKsgrCkotLs0pKVayio6t5QIABYyPeB4AAAA=");
+            //** Pull in the file from the server **//
+            //Unzip the file 
 
-            //** Decompress**//
-            byte[] decompress = Decompress(data);
+            string[] arrays;
+            String sdira = @"\\csiadSAT07\page_content";
+            arrays = Directory.GetFiles(sdira, "*", SearchOption.AllDirectories).Select(x => Path.GetFileName(x)).ToArray();
 
-            /** Convert to a string **/
-            string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
+            //foreach (string s in arrays) {
+                //System.Console.WriteLine(s);
 
-            /** Write to console **/
-            System.Console.WriteLine(text);
 
-            System.Console.ReadLine();
+                byte[] input = File.ReadAllBytes(@"\\csiadSAT07\page_content\20140720_17_ia1cid01_3_page_content_tran.bcp.gz");
+
+                Console.WriteLine("BEFORE DECOMPRESS*****************");
+                byte[] decomp = Decompress(input);
+
+                
+                string xn = System.Text.Encoding.UTF8.GetString(decomp);
+                Debug.WriteLine(xn);
+
+
+                //****DECODE 64****//
+                //byte[] data = Convert.FromBase64String("H4sIAAAAAAAA/6tWykxRslIyMjAwVNJRKsgrCkotLs0pKVayio6t5QIABYyPeB4AAAA=");
+
+                //** Decompress**//
+               // byte[] decompress = Decompress(data);
+
+                /** Convert to a string **/
+                //string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
+
+                /** Write to console **/
+               // System.Console.WriteLine(text);
+
+           // }
+
+            System.Console.ReadLine(); 
         }
 
+
+        //** METHOD TO DECOMPRESS THE GZIP **//
         static byte[] Decompress(byte[] gzip)
         {
             using (GZipStream stream = new GZipStream(new MemoryStream(gzip),
@@ -50,7 +75,8 @@ namespace ConsoleApplication1
                     return memory.ToArray();
                 }
             }
-
         }
+
+
     }
 }
