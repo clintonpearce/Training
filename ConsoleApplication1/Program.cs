@@ -87,14 +87,31 @@ namespace ConsoleApplication
         }
 
         // Insert logic for processing found files here. 
-        public static void ProcessFile(string path)
+        public static void ProcessFile(string filepath)
         {
-            FileInfo fileToDecompress = new FileInfo(path);
-            Decompress(fileToDecompress);
-            Console.WriteLine("Processed file '{0}'.", path);
+            FileInfo fileToDecompress = new FileInfo(filepath);
+            string newfile = Decompress(fileToDecompress);
+            Console.WriteLine("NewPath : {0}", newfile);
+
+            // Read the file and display it line by line.
+            System.IO.StreamReader file =
+               new System.IO.StreamReader(newfile);
+            int counter = 3;
+            string line;
+            while ( counter >0 && (line = file.ReadLine()) != null)
+            {
+                counter--;
+                
+                String[] columns = line.Split('\t');
+                Console.WriteLine(columns[15]);
+            }
+            
+
+            //Console.WriteLine("line : {0} ", line);
         }
 
-        public static void Decompress(FileInfo fileToDecompress)
+
+        public static string Decompress(FileInfo fileToDecompress)
         {
             using (FileStream originalFileStream = fileToDecompress.OpenRead())
             {
@@ -109,6 +126,7 @@ namespace ConsoleApplication
                         Console.WriteLine("Decompressed: {0}", fileToDecompress.Name);
                     }
                 }
+                return newFileName;
             }
         }
     }
