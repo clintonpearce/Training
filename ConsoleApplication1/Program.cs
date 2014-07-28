@@ -7,12 +7,30 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
 
-namespace ConsoleApplication1
+namespace ConsoleApplication
 {
     class Program
     {
         static void Main(string[] args)
         {
+            string path = @"C:\data";
+
+            if (File.Exists(path))
+            {
+                // This path is a file
+                ProcessFile(path);
+            }
+            else if (Directory.Exists(path))
+            {
+                // This path is a directory
+                ProcessDirectory(path);
+            }
+            else
+            {
+                Console.WriteLine("{0} is not a valid file or directory.", path);
+            }
+          
+
             //****DECODE 64****//
             byte[] data = Convert.FromBase64String("H4sIAAAAAAAA/6tWykxRslIyMjAwVNJRKsgrCkotLs0pKVayio6t5QIABYyPeB4AAAA=");
 
@@ -51,6 +69,47 @@ namespace ConsoleApplication1
                 }
             }
 
+        }
+
+        // Process all files in the directory passed in, recurse on any directories  
+        // that are found, and process the files they contain. 
+        public static void ProcessDirectory(string targetDirectory)
+        {
+            // Process the list of files found in the directory. 
+            string[] fileEntries = Directory.GetFiles(targetDirectory);
+            foreach (string fileName in fileEntries)
+                ProcessFile(fileName);
+
+            // Recurse into subdirectories of this directory. 
+            string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+            foreach (string subdirectory in subdirectoryEntries)
+                ProcessDirectory(subdirectory);
+        }
+
+        // Insert logic for processing found files here. 
+        public static void ProcessFile(string path)
+        {
+            FileInfo fileToDecompress = new FileInfo(path);
+            Decompress(fileToDecompress);
+            Console.WriteLine("Processed file '{0}'.", path);
+        }
+
+        public static void Decompress(FileInfo fileToDecompress)
+        {
+            using (FileStream originalFileStream = fileToDecompress.OpenRead())
+            {
+                string currentFileName = fileToDecompress.FullName;
+                string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+                using (FileStream decompressedFileStream = File.Create(newFileName))
+                {
+                    using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
+                    {
+                        decompressionStream.CopyTo(decompressedFileStream);
+                        Console.WriteLine("Decompressed: {0}", fileToDecompress.Name);
+                    }
+                }
+            }
         }
     }
 }
