@@ -100,6 +100,17 @@ namespace ConsoleApplication1
         // Insert logic for processing found files here. 
         public static void ProcessFile(string filepath)
         {
+            int amazonName = 0;
+            int craigslistEmail = 0;
+            int linkedinEmail = 0;
+            int linkedinName = 0;
+            int netflixEmail = 0;
+            int netflixName = 0;
+            int aolEmail = 0;
+            int aolName = 0;
+            int aolUsername = 0;
+            int aolGender = 0;
+
             /** Changes in decompression to speed up code **/
             foreach (var f in Directory.GetFiles(filepath, "*ri*"))
             {
@@ -147,12 +158,14 @@ namespace ConsoleApplication1
 
                         if (currentDomain.Contains("amazon"))
                         {
+                            
                             //Console.WriteLine("Initializing parser for amazon");
                             parser = new AmazonParser(text);
                             parser.parseName();
                             Person p = parser.getPerson();
                             if (p.NameExists)
                             {
+                                amazonName = amazonName + 1; //increment the counter
                                 output += columns[2] + "\t" + columns[6] + "\t" + currentDomain +"\t" + p.Name;
                                 Console.WriteLine("Output : {0}" + output);
 
@@ -167,6 +180,7 @@ namespace ConsoleApplication1
                             Person p = parser.getPerson();
                             if (p.EmailExists)
                             {
+                                craigslistEmail = craigslistEmail + 1; //increment the counter
                                 output += columns[2] + "\t" + columns[6] + "\t" + currentDomain +"\t"+ "\t" + p.Email;
                                 Console.WriteLine("Output : {0}" + output);
 
@@ -186,6 +200,12 @@ namespace ConsoleApplication1
                             Person p = parser.getPerson();
                             if (p.NameExists || p.EmailExists)
                             {
+                                if (p.NameExists) {
+                                    linkedinName = linkedinName + 1;
+                                }
+                                if (p.EmailExists) {
+                                    linkedinEmail = linkedinEmail + 1;
+                                }
                                 output += columns[2] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name + "\t" + "" + "\t" + p.Email + "\t" + p.Gender + "\t" + "";
                                 Console.WriteLine("Output : {0}" + output);
 
@@ -195,30 +215,6 @@ namespace ConsoleApplication1
                                 }
                             }
                         }
-                        
-                        
-                        /** Write to text file
-                        using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
-                        {
-                            sw.WriteLine(text);
-                        }
-
-                        **/
-
-                        //******* Search the files for the regular expression ***********// 
-                        /*string[] files = Directory.GetFiles(@"C:\data\"+sep(currentDomain)+"InOutput.txt");
-                        foreach (string fileName in files) {
-
-                            System.Console.Write("{0,24}", fileName);
-                            if (System.Text.RegularExpressions.Regex.IsMatch(s, amazonNamePattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
-                            {
-                                System.Console.WriteLine("  (match for '{0}' found)", sPattern);
-                            }
-                            else
-                            {
-                                System.Console.WriteLine();
-                            }  
-                        }*/
                     }
                 }
             }
