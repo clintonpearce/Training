@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
+using ICSharpCode.SharpZipLib.GZip;
 
 namespace ConsoleApplication
 {
@@ -16,7 +17,9 @@ namespace ConsoleApplication
 
             // This is the path to the .gz files.
             string path = @"\\csiadsat07\page_content2\";
+            ProcessFile(path);
 
+            /**
             if (File.Exists(path))
             {
                 // This path is a file
@@ -31,6 +34,9 @@ namespace ConsoleApplication
             {
                 Console.WriteLine("{0} is not a valid file or directory.", path);
             }
+            **/
+
+
         }
 
         static byte[] Decompress(byte[] gzip)
@@ -73,9 +79,34 @@ namespace ConsoleApplication
                 ProcessDirectory(subdirectory);
         }
 
+        public static IEnumerable<string> ReadFile(string inputFile)
+        {
+            using (Stream s = new GZipInputStream(File.OpenRead(inputFile)))
+            {
+                using (var stream = new StreamReader(s))
+                {
+                    string sLine;
+                    while ((sLine = stream.ReadLine()) != null)
+                    {
+                        yield return sLine;
+                    }
+                }
+            }
+            yield break;
+        }
+
+
         // Insert logic for processing found files here. 
         public static void ProcessFile(string filepath)
         {
+            /** Changes in decompression to speed up code **/
+            foreach (var f in Directory.GetFiles(filepath, "*ri*"))
+            {
+                Console.WriteLine("Reading file " + f);
+                var rows = ReadFile(f);
+
+
+            /**
             FileInfo fileToDecompress = new FileInfo(filepath);
             string newfile = Decompress(fileToDecompress);
             Console.WriteLine("NewPath : {0}", newfile);
@@ -83,51 +114,53 @@ namespace ConsoleApplication
             // Read the file and display it line by line.
             System.IO.StreamReader file =
                new System.IO.StreamReader(newfile);
-        
-            string line;
-            while ((line = file.ReadLine()) != null)
-            {
+            
+             **/
 
-                // Split line by tab delimiter
-                String[] columns = line.Split('\t');
-
-                //get the correct domain
-                string currentDomain = columns[9].ToString().ToLower().Trim();
-                //list of the domains we're checking against
-                String[] domainsArray = { "amazon", "craigslist", "aol", "linkedin", "netflix" };
-
-                //if the array contains the current domain decode/decompress and if column 15 is not null or empty
-                if (domainsArray.Any(currentDomain.Contains) && (String.IsNullOrEmpty(columns[15]) == false))
+                foreach (var line in rows)
                 {
-                    //****DECODE 64****//
-                    byte[] data = Convert.FromBase64String(columns[15]);
 
-                    //** Decompress**//
-                    byte[] decompress = Decompress(data);
+                    // Split line by tab delimiter
+                    String[] columns = line.Split('\t');
 
-                    /** Convert to a string **/
-                    string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
+                    //get the correct domain
+                    string currentDomain = columns[9].ToString().ToLower().Trim();
+                    //list of the domains we're checking against
+                    String[] domainsArray = { "amazon", "craigslist", "aol", "linkedin", "netflix" };
 
-                    /** Write to text file **/
-                    using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
+                    //if the array contains the current domain decode/decompress and if column 15 is not null or empty
+                    if (domainsArray.Any(currentDomain.Contains) && (String.IsNullOrEmpty(columns[15]) == false))
                     {
-                        sw.WriteLine(text);
-                    }
+                        //****DECODE 64****//
+                        byte[] data = Convert.FromBase64String(columns[15]);
 
-                    //******* Search the files for the regular expression ***********// 
-                    /*string[] files = Directory.GetFiles(@"C:\data\"+sep(currentDomain)+"InOutput.txt");
-                    foreach (string fileName in files) {
+                        //** Decompress**//
+                        byte[] decompress = Decompress(data);
 
-                        System.Console.Write("{0,24}", fileName);
-                        if (System.Text.RegularExpressions.Regex.IsMatch(s, amazonNamePattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                        /** Convert to a string **/
+                        string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
+
+                        /** Write to text file **/
+                        using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
                         {
-                            System.Console.WriteLine("  (match for '{0}' found)", sPattern);
+                            sw.WriteLine(text);
                         }
-                        else
-                        {
-                            System.Console.WriteLine();
-                        }  
-                    }*/
+
+                        //******* Search the files for the regular expression ***********// 
+                        /*string[] files = Directory.GetFiles(@"C:\data\"+sep(currentDomain)+"InOutput.txt");
+                        foreach (string fileName in files) {
+
+                            System.Console.Write("{0,24}", fileName);
+                            if (System.Text.RegularExpressions.Regex.IsMatch(s, amazonNamePattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                            {
+                                System.Console.WriteLine("  (match for '{0}' found)", sPattern);
+                            }
+                            else
+                            {
+                                System.Console.WriteLine();
+                            }  
+                        }*/
+                    }
                 }
             }
         }
