@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
 using ICSharpCode.SharpZipLib.GZip;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApplication1
 {
@@ -106,16 +107,16 @@ namespace ConsoleApplication1
                 var rows = ReadFile(f);
 
 
-                /**
-                FileInfo fileToDecompress = new FileInfo(filepath);
-                string newfile = Decompress(fileToDecompress);
-                Console.WriteLine("NewPath : {0}", newfile);
+            /**
+            FileInfo fileToDecompress = new FileInfo(filepath);
+            string newfile = Decompress(fileToDecompress);
+            Console.WriteLine("NewPath : {0}", newfile);
 
-                // Read the file and display it line by line.
-                System.IO.StreamReader file =
-                   new System.IO.StreamReader(newfile);
+            // Read the file and display it line by line.
+            System.IO.StreamReader file =
+               new System.IO.StreamReader(newfile);
             
-                 **/
+             **/
 
                 foreach (var line in rows)
                 {
@@ -146,7 +147,7 @@ namespace ConsoleApplication1
 
                         if (currentDomain.Contains("amazon"))
                         {
-                            //Console.WriteLine("Initializing parser for amazon");
+                            Console.WriteLine("Initializing parser for amazon");
                             parser = new AmazonParser(text);
                             parser.parseName();
                             Person p = parser.getPerson();
@@ -179,8 +180,24 @@ namespace ConsoleApplication1
 
 
                         }
+                        if (currentDomain.Contains("linkedin"))
+                        {
+                            //Console.WriteLine("Initializing parser for amazon");
+                            parser = new LinkedinParser(text);
+                            parser.parseName();
+                            Person p = parser.getPerson();
+                            if (p.NameExists || p.EmailExists)
+                            {
+                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name + "\t" + "" + "\t" + p.Email + "\t" + p.Gender + "\t" + "";
+                                Console.WriteLine("Output : {0}" + output);
 
-
+                                using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
+                                {
+                                    sw.WriteLine(output);
+                                }
+                            }
+                        }
+                        
                         if (currentDomain.Contains("aol"))
                         {
                             //Console.WriteLine("Initializing parser for amazon");
@@ -204,7 +221,7 @@ namespace ConsoleApplication1
                         }
 
 
-
+                        
                         /** Write to text file
                         using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
                         {

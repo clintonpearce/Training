@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication1
 {
-    class CraigslistParser : IDomain
+    class NetflixParser : IDomain
     {
         private String html;
         private Person p;
 
-        public CraigslistParser(String html)
+        public NetflixParser(String html)
         {
             this.html = html;
             p = new Person();
@@ -20,10 +20,9 @@ namespace ConsoleApplication1
 
         public void parseEmail()
         {
-            string craigslistEmailPatt = "logged\\sin\\sas.*\">(.*@.*\\....)";
-            string craigslistEmailPatt2 = @"name='FromEMail' value='(.*@.*\..*)'\>";
+            string netflixEmailPattern = "input.*id=\"email\".*value=\"(.+@.+?)\".*";
 
-            Regex r = new Regex(craigslistEmailPatt);
+            Regex r = new Regex(netflixEmailPattern);
             Match m = r.Match(html);
             if (m.Success)
             {
@@ -33,21 +32,25 @@ namespace ConsoleApplication1
             }
             else
             {
-                r = new Regex(craigslistEmailPatt2);
-                m = r.Match(html);
-                if (m.Success)
-                {
-                    Group g = m.Groups[1];
-                    Console.WriteLine(g);
-                    p.Email = g.ToString();
-                }
+
             }
 
         }
 
         public void parseName()
         {
-           
+            //Console.WriteLine("Html is : {0}", html);
+            string netflixNamePattern = "\"cfn\":\"(.*?)\"";
+            Regex r = new Regex(netflixNamePattern);
+
+            // Match the regular expression pattern against a text string. 
+            Match m = r.Match(html);
+            if (m.Success)
+            {
+                Group g = m.Groups[1];
+                //Console.WriteLine(g);
+                p.Name = g.ToString();
+            }
         }
 
         public void parseGender()
@@ -64,6 +67,5 @@ namespace ConsoleApplication1
         {
             return p;
         }
-
     }
 }

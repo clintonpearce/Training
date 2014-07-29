@@ -46,7 +46,9 @@
   <ItemGroup>
     <Compile Include="AmazonParser.cs" />
     <Compile Include="AOLParser.cs" />
+    <Compile Include="LinkedinParser.cs" />
     <Compile Include="CraigslistParser.cs" />
+    <Compile Include="NetflixParser.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="IDomain.cs" />
     <Compile Include="Program.cs" />
