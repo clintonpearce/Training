@@ -20,7 +20,7 @@ namespace ConsoleApplication1
 
         public void parseEmail()
         {
-            string craigslistEmailPatt = @"<b><a href='https://accounts.craigslist.org/login'>***********@*****.***</a>";
+            string craigslistEmailPatt = "logged\\sin\\sas.*\">(.*@.*\\....)";
             string craigslistEmailPatt2 = @"name='FromEMail' value='(.*@.*\..*)'\>";
 
             Regex r = new Regex(craigslistEmailPatt);

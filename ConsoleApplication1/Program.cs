@@ -153,7 +153,7 @@ namespace ConsoleApplication1
                             Person p = parser.getPerson();
                             if (p.NameExists)
                             {
-                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain +"\t" + p.Name;
+                                output += columns[1] + "\t" + columns[6] + "\t" + currentDomain +"\t" + p.Name;
                                 Console.WriteLine("Output : {0}" + output);
 
                                 using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
@@ -167,7 +167,7 @@ namespace ConsoleApplication1
                             Person p = parser.getPerson();
                             if (p.EmailExists)
                             {
-                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain +"\t"+ "\t" + p.Email;
+                                output += columns[1] + "\t" + columns[6] + "\t" + currentDomain +"\t"+ "\t" + p.Email;
                                 Console.WriteLine("Output : {0}" + output);
 
                                 using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
@@ -186,7 +186,7 @@ namespace ConsoleApplication1
                             Person p = parser.getPerson();
                             if (p.NameExists || p.EmailExists)
                             {
-                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name + "\t" + "" + "\t" + p.Email + "\t" + p.Gender + "\t" + "";
+                                output += columns[1] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name + "\t" + "" + "\t" + p.Email + "\t" + p.Gender + "\t" + "";
                                 Console.WriteLine("Output : {0}" + output);
 
                                 using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
