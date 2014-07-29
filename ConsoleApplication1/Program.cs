@@ -106,16 +106,16 @@ namespace ConsoleApplication1
                 var rows = ReadFile(f);
 
 
-            /**
-            FileInfo fileToDecompress = new FileInfo(filepath);
-            string newfile = Decompress(fileToDecompress);
-            Console.WriteLine("NewPath : {0}", newfile);
+                /**
+                FileInfo fileToDecompress = new FileInfo(filepath);
+                string newfile = Decompress(fileToDecompress);
+                Console.WriteLine("NewPath : {0}", newfile);
 
-            // Read the file and display it line by line.
-            System.IO.StreamReader file =
-               new System.IO.StreamReader(newfile);
+                // Read the file and display it line by line.
+                System.IO.StreamReader file =
+                   new System.IO.StreamReader(newfile);
             
-             **/
+                 **/
 
                 foreach (var line in rows)
                 {
@@ -152,7 +152,7 @@ namespace ConsoleApplication1
                             Person p = parser.getPerson();
                             if (p.NameExists)
                             {
-                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain +"\t" + p.Name;
+                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name;
                                 Console.WriteLine("Output : {0}" + output);
 
                                 using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
@@ -162,8 +162,31 @@ namespace ConsoleApplication1
                             }
                         }
 
-                        
-                        
+
+                        if (currentDomain.Contains("aol"))
+                        {
+                            //Console.WriteLine("Initializing parser for amazon");
+                            parser = new AOLParser(text);
+                            parser.parseName();
+                            parser.parseEmail();
+                            parser.parseGender();
+                            parser.parseUserName();
+
+                            Person p = parser.getPerson();
+                            if (p.NameExists)
+                            {
+                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name + "\t" + p.UserName + "\t" + p.Email + "\t" + p.Gender;
+                                Console.WriteLine("Output : {0}" + output);
+
+                                using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
+                                {
+                                    sw.WriteLine(output);
+                                }
+                            }
+                        }
+
+
+
                         /** Write to text file
                         using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
                         {

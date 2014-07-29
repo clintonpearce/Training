@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\..\..\..\..\..\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\..\..\..\Documents\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmazonParser.cs" />
+    <Compile Include="AOLParser.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="IDomain.cs" />
     <Compile Include="Program.cs" />
