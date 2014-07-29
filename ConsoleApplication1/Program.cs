@@ -92,7 +92,7 @@ namespace ConsoleApplication
                 // Split line by tab delimiter
                 String[] columns = line.Split('\t');
 
-                if (columns[9].ToString().ToLower().Trim().Contains("linkedin"))
+                if (columns[9].ToString().ToLower().Trim().Contains("craigslist"))
                 {
 
                     //****DECODE 64****//
@@ -108,20 +108,14 @@ namespace ConsoleApplication
                     //Console.WriteLine(text);
 
                     /** Write to text file **/
-                    using (StreamWriter sw = new StreamWriter(@"C:\LinkedInOutput.txt", true))
+                    using (StreamWriter sw = new StreamWriter(@"C:\data\craigslist.txt", true))
                     {
-
-                        Console.WriteLine("Writing to file.");
                         sw.WriteLine(text);
-
                     }
                 }
             }
         }
             
-
-        
-
 
         public static string Decompress(FileInfo fileToDecompress)
         {
@@ -131,7 +125,7 @@ namespace ConsoleApplication
                // string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
 
                 // This is where you want the .txt file to be stored.
-                string newFileName = @"C:\data\" + fileToDecompress.Name; 
+                string newFileName = @"C:\data\" + fileToDecompress.Name.Remove(fileToDecompress.Name.Length - fileToDecompress.Extension.Length); 
 
                 using (FileStream decompressedFileStream = File.Create(newFileName))
                 {
