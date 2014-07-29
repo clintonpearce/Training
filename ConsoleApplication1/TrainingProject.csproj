@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmazonParser.cs" />
+    <Compile Include="CraigslistParser.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="IDomain.cs" />
     <Compile Include="Program.cs" />

@@ -160,6 +160,22 @@ namespace ConsoleApplication1
                                     sw.WriteLine(output);
                                 }
                             }
+                        }else if(currentDomain.Contains("craigslist")){
+                            parser = new CraigslistParser(text);
+                            parser.parseEmail();
+                            Person p = parser.getPerson();
+                            if (p.EmailExists)
+                            {
+                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain +"\t"+ "\t" + p.Email;
+                                Console.WriteLine("Output : {0}" + output);
+
+                                using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
+                                {
+                                    sw.WriteLine(output);
+                                }
+                            }
+
+
                         }
 
                         
