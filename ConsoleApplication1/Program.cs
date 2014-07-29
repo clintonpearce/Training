@@ -8,7 +8,7 @@ using System.IO.Compression;
 using System.IO;
 using ICSharpCode.SharpZipLib.GZip;
 
-namespace ConsoleApplication
+namespace ConsoleApplication1
 {
     class Program
     {
@@ -140,11 +140,37 @@ namespace ConsoleApplication
                         /** Convert to a string **/
                         string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
 
-                        /** Write to text file **/
+                        //Console.WriteLine("Parsing html for domain : {0}",currentDomain);
+                        IDomain parser;
+                        String output = "";
+
+                        if (currentDomain.Contains("amazon"))
+                        {
+                            //Console.WriteLine("Initializing parser for amazon");
+                            parser = new AmazonParser(text);
+                            parser.parseName();
+                            Person p = parser.getPerson();
+                            if (p.NameExists)
+                            {
+                                output += columns[2] + "\t" + columns[6] + "\t" + currentDomain +"\t" + p.Name;
+                                Console.WriteLine("Output : {0}" + output);
+
+                                using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
+                                {
+                                    sw.WriteLine(output);
+                                }
+                            }
+                        }
+
+                        
+                        
+                        /** Write to text file
                         using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
                         {
                             sw.WriteLine(text);
                         }
+
+                        **/
 
                         //******* Search the files for the regular expression ***********// 
                         /*string[] files = Directory.GetFiles(@"C:\data\"+sep(currentDomain)+"InOutput.txt");
