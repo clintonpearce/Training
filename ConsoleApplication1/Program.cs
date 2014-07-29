@@ -77,7 +77,6 @@ namespace ConsoleApplication
         public static void ProcessFile(string filepath)
         {
             FileInfo fileToDecompress = new FileInfo(filepath);
-            //if()
             string newfile = Decompress(fileToDecompress);
             Console.WriteLine("NewPath : {0}", newfile);
 
@@ -93,13 +92,7 @@ namespace ConsoleApplication
                 // Split line by tab delimiter
                 String[] columns = line.Split('\t');
 
-                //get the correct domain
-                string currentDomain = columns[9].ToString().ToLower().Trim();
-                //list of the domains we're checking against
-                String[] domainsArray = {"amazon", "craigslist", "aol", "linkedin", "netflix"};
-
-                //if the array contains the current domain decode/decompress and if column 15 is not null or empty
-                if (domainsArray.Any(currentDomain.Contains) && (String.IsNullOrEmpty(columns[15])==false))
+                if (columns[9].ToString().ToLower().Trim().Contains("craigslist"))
                 {
 
                     //****DECODE 64****//
@@ -117,12 +110,9 @@ namespace ConsoleApplication
                     //drop the 
 
                     /** Write to text file **/
-                    using (StreamWriter sw = new StreamWriter(@"C:\data\"+sep(currentDomain)+"InOutput.txt", true))
+                    using (StreamWriter sw = new StreamWriter(@"C:\data\craigslist.txt", true))
                     {
-
-                        Console.WriteLine("Writing to file.");
                         sw.WriteLine(text);
-
                     }
 
                     //******* Search the files for the regular expression ***********// 
@@ -142,19 +132,8 @@ namespace ConsoleApplication
                 }
             }
         }
+            
 
-        public static string sep(string s)
-        {
-            //to return the domain
-            int l = s.IndexOf(".");
-            if (l > 0)
-            {
-                return s.Substring(0, l);
-            }
-            return "";
-        }
-
-        
         public static string Decompress(FileInfo fileToDecompress)
         {
             using (FileStream originalFileStream = fileToDecompress.OpenRead())
@@ -163,11 +142,7 @@ namespace ConsoleApplication
                // string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
 
                 // This is where you want the .txt file to be stored.
-                string newFileName = @"C:\data\" + fileToDecompress.Name;
-                if (File.Exists(newFileName)) {
-                    //Console.WriteLine("*****FILE EXISTS*******");
-                    return newFileName;
-                }
+                string newFileName = @"C:\data\" + fileToDecompress.Name.Remove(fileToDecompress.Name.Length - fileToDecompress.Extension.Length); 
 
                 using (FileStream decompressedFileStream = File.Create(newFileName))
                 {
