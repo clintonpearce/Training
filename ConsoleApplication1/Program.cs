@@ -13,7 +13,9 @@ namespace ConsoleApplication
     {
         static void Main(string[] args)
         {
-            string path = @"C:\data";
+
+            // This is the path to the .gz files.
+            string path = @"\\csiadsat07\page_content2\";
 
             if (File.Exists(path))
             {
@@ -81,44 +83,61 @@ namespace ConsoleApplication
             // Read the file and display it line by line.
             System.IO.StreamReader file =
                new System.IO.StreamReader(newfile);
-            int counter = 3;
+            //int counter = 3;
             string line;
-            while ( counter >0 && (line = file.ReadLine()) != null)
+            while ((line = file.ReadLine()) != null)
             {
-                counter--;
+                //counter--;
 
                 // Split line by tab delimiter
                 String[] columns = line.Split('\t');
 
-                //****DECODE 64****//
-                byte[] data = Convert.FromBase64String(columns[15]);
+                if (columns[9].ToString().ToLower().Trim().Contains("linkedin"))
+                {
 
-                //** Decompress**//
-                byte[] decompress = Decompress(data);
+                    //****DECODE 64****//
+                    byte[] data = Convert.FromBase64String(columns[15]);
 
-                /** Convert to a string **/
-                string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
+                    //** Decompress**//
+                    byte[] decompress = Decompress(data);
 
-                /** Write to console **/
-                Console.WriteLine(text);
+                    /** Convert to a string **/
+                    string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
+
+                    /** Write to console **/
+                    //Console.WriteLine(text);
+
+                    /** Write to text file **/
+                    using (StreamWriter sw = new StreamWriter(@"C:\LinkedInOutput.txt", true))
+                    {
+
+                        Console.WriteLine("Writing to file.");
+                        sw.WriteLine(text);
+
+                    }
+                }
             }
+        }
             
 
-            //Console.WriteLine("line : {0} ", line);
-        }
+        
 
 
         public static string Decompress(FileInfo fileToDecompress)
         {
             using (FileStream originalFileStream = fileToDecompress.OpenRead())
             {
-                string currentFileName = fileToDecompress.FullName;
-                string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+                //string currentFileName = fileToDecompress.FullName;
+               // string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
+
+                // This is where you want the .txt file to be stored.
+                string newFileName = @"C:\data\" + fileToDecompress.Name; 
 
                 using (FileStream decompressedFileStream = File.Create(newFileName))
                 {
                     using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
                     {
+                        Console.WriteLine("Decompressing...");
                         decompressionStream.CopyTo(decompressedFileStream);
                         Console.WriteLine("Decompressed: {0}", fileToDecompress.Name);
                     }
