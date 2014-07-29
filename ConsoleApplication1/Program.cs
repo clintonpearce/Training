@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
 using ICSharpCode.SharpZipLib.GZip;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApplication
 {
@@ -145,6 +146,7 @@ namespace ConsoleApplication
                         {
                             sw.WriteLine(text);
                         }
+
 
                         //******* Search the files for the regular expression ***********// 
                         /*string[] files = Directory.GetFiles(@"C:\data\"+sep(currentDomain)+"InOutput.txt");
