@@ -114,6 +114,8 @@ namespace ConsoleApplication
                     /** Write to console **/
                     //Console.WriteLine(text);
 
+                    //drop the 
+
                     /** Write to text file **/
                     using (StreamWriter sw = new StreamWriter(@"C:\data\"+sep(currentDomain)+"InOutput.txt", true))
                     {
@@ -122,6 +124,21 @@ namespace ConsoleApplication
                         sw.WriteLine(text);
 
                     }
+
+                    //******* Search the files for the regular expression ***********// 
+                    /*string[] files = Directory.GetFiles(@"C:\data\"+sep(currentDomain)+"InOutput.txt");
+                    foreach (string fileName in files) {
+
+                        System.Console.Write("{0,24}", fileName);
+                        if (System.Text.RegularExpressions.Regex.IsMatch(s, amazonNamePattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                        {
+                            System.Console.WriteLine("  (match for '{0}' found)", sPattern);
+                        }
+                        else
+                        {
+                            System.Console.WriteLine();
+                        }  
+                    }*/
                 }
             }
         }
