@@ -118,16 +118,16 @@ namespace ConsoleApplication1
                 var rows = ReadFile(f);
 
 
-            /**
-            FileInfo fileToDecompress = new FileInfo(filepath);
-            string newfile = Decompress(fileToDecompress);
-            Console.WriteLine("NewPath : {0}", newfile);
+                /**
+                FileInfo fileToDecompress = new FileInfo(filepath);
+                string newfile = Decompress(fileToDecompress);
+                Console.WriteLine("NewPath : {0}", newfile);
 
-            // Read the file and display it line by line.
-            System.IO.StreamReader file =
-               new System.IO.StreamReader(newfile);
+                // Read the file and display it line by line.
+                System.IO.StreamReader file =
+                   new System.IO.StreamReader(newfile);
             
-             **/
+                 **/
 
                 foreach (var line in rows)
                 {
@@ -158,7 +158,7 @@ namespace ConsoleApplication1
 
                         if (currentDomain.Contains("amazon"))
                         {
-                            
+
                             //Console.WriteLine("Initializing parser for amazon");
                             parser = new AmazonParser(text);
                             parser.parseName();
@@ -166,7 +166,7 @@ namespace ConsoleApplication1
                             if (p.NameExists)
                             {
                                 amazonName = amazonName + 1; //increment the counter
-                                output += columns[1] + "\t" + columns[6] + "\t" + currentDomain +"\t" + p.Name;
+                                output += columns[1] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name;
                                 Console.WriteLine("Output : {0}" + output);
 
                                 using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
@@ -183,7 +183,7 @@ namespace ConsoleApplication1
                             if (p.EmailExists)
                             {
                                 craigslistEmail = craigslistEmail + 1; //increment the counter
-                                output += columns[1] + "\t" + columns[6] + "\t" + currentDomain +"\t"+ "\t" + p.Email;
+                                output += columns[1] + "\t" + columns[6] + "\t" + currentDomain + "\t" + "\t" + p.Email;
                                 Console.WriteLine("Output : {0}" + output);
 
                                 using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "Output.txt", true))
@@ -202,10 +202,12 @@ namespace ConsoleApplication1
                             Person p = parser.getPerson();
                             if (p.NameExists || p.EmailExists)
                             {
-                                if (p.NameExists) {
+                                if (p.NameExists)
+                                {
                                     linkedinName = linkedinName + 1;
                                 }
-                                if (p.EmailExists) {
+                                if (p.EmailExists)
+                                {
                                     linkedinEmail = linkedinEmail + 1;
                                 }
                                 output += columns[1] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name + "\t" + "" + "\t" + p.Email + "\t" + p.Gender + "\t" + "";
@@ -217,7 +219,7 @@ namespace ConsoleApplication1
                                 }
                             }
                         }
-                        
+
                         if (currentDomain.Contains("aol"))
                         {
                             //Console.WriteLine("Initializing parser for amazon");
@@ -239,6 +241,10 @@ namespace ConsoleApplication1
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
 
 
                         
@@ -264,7 +270,7 @@ namespace ConsoleApplication1
                 }
             }
         }
-
+*/
         public static string sep(string s)
         {
             //to return the domain
