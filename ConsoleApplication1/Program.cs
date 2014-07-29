@@ -83,18 +83,22 @@ namespace ConsoleApplication
             // Read the file and display it line by line.
             System.IO.StreamReader file =
                new System.IO.StreamReader(newfile);
-            //int counter = 3;
+        
             string line;
             while ((line = file.ReadLine()) != null)
             {
-                //counter--;
 
                 // Split line by tab delimiter
                 String[] columns = line.Split('\t');
 
-                if (columns[9].ToString().ToLower().Trim().Contains("craigslist"))
-                {
+                //get the correct domain
+                string currentDomain = columns[9].ToString().ToLower().Trim();
+                //list of the domains we're checking against
+                String[] domainsArray = { "amazon", "craigslist", "aol", "linkedin", "netflix" };
 
+                //if the array contains the current domain decode/decompress and if column 15 is not null or empty
+                if (domainsArray.Any(currentDomain.Contains) && (String.IsNullOrEmpty(columns[15]) == false))
+                {
                     //****DECODE 64****//
                     byte[] data = Convert.FromBase64String(columns[15]);
 
@@ -104,13 +108,8 @@ namespace ConsoleApplication
                     /** Convert to a string **/
                     string text = System.Text.ASCIIEncoding.ASCII.GetString(decompress);
 
-                    /** Write to console **/
-                    //Console.WriteLine(text);
-
-                    //drop the 
-
                     /** Write to text file **/
-                    using (StreamWriter sw = new StreamWriter(@"C:\data\craigslist.txt", true))
+                    using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
                     {
                         sw.WriteLine(text);
                     }
@@ -132,17 +131,31 @@ namespace ConsoleApplication
                 }
             }
         }
-            
+
+        public static string sep(string s)
+        {
+            //to return the domain
+            int l = s.IndexOf(".");
+            if (l > 0)
+            {
+                return s.Substring(0, l);
+            }
+            return "";
+        }
+
 
         public static string Decompress(FileInfo fileToDecompress)
         {
             using (FileStream originalFileStream = fileToDecompress.OpenRead())
             {
-                //string currentFileName = fileToDecompress.FullName;
-               // string newFileName = currentFileName.Remove(currentFileName.Length - fileToDecompress.Extension.Length);
 
                 // This is where you want the .txt file to be stored.
-                string newFileName = @"C:\data\" + fileToDecompress.Name.Remove(fileToDecompress.Name.Length - fileToDecompress.Extension.Length); 
+                string newFileName = @"C:\data\" + fileToDecompress.Name;
+                if (File.Exists(newFileName))
+                {
+                    //Console.WriteLine("*****FILE EXISTS*******");
+                    return newFileName;
+                }
 
                 using (FileStream decompressedFileStream = File.Create(newFileName))
                 {
