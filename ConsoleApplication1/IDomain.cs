@@ -11,6 +11,7 @@ namespace ConsoleApplication1
         void parseEmail();
         void parseName();
         void parseGender();
+        void parseUserName();
         Person getPerson();
     }
 }

@@ -63,6 +63,11 @@ namespace ConsoleApplication1
 
         }
 
+        public void parseUserName()
+        {
+
+        }
+
         public Person getPerson()
         {
             return p;

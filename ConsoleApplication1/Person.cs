@@ -11,9 +11,11 @@ namespace ConsoleApplication1
         private String name;
         private String email;
         private String gender;
+        private String userName;
         public bool NameExists { get; set; }
         public bool EmailExists { get; set; }
         public bool GenderExists { get; set; }
+        public bool UserNameExists { get; set; }
 
         public Person()
         {
@@ -36,6 +38,12 @@ namespace ConsoleApplication1
         {
             get { return gender; }
             set { gender = value; GenderExists = true; }
+        }
+
+        public String UserName
+        {
+            get { return userName; }
+            set { userName = value; UserNameExists = true; }
         }
     }
 }

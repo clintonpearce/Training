@@ -23,6 +23,11 @@ namespace ConsoleApplication1
 
         }
 
+        public void parseUserName()
+        {
+
+        }
+
         public void parseName()
         {
             //Console.WriteLine("Html is : {0}", html);
