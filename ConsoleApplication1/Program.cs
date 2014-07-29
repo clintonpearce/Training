@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApplication
 {
@@ -113,21 +114,6 @@ namespace ConsoleApplication
                     {
                         sw.WriteLine(text);
                     }
-
-                    //******* Search the files for the regular expression ***********// 
-                    /*string[] files = Directory.GetFiles(@"C:\data\"+sep(currentDomain)+"InOutput.txt");
-                    foreach (string fileName in files) {
-
-                        System.Console.Write("{0,24}", fileName);
-                        if (System.Text.RegularExpressions.Regex.IsMatch(s, amazonNamePattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase))
-                        {
-                            System.Console.WriteLine("  (match for '{0}' found)", sPattern);
-                        }
-                        else
-                        {
-                            System.Console.WriteLine();
-                        }  
-                    }*/
                 }
             }
         }
