@@ -230,8 +230,28 @@ namespace ConsoleApplication1
                             parser.parseUserName();
 
                             Person p = parser.getPerson();
-                            if (p.NameExists)
+                            if (p.NameExists || p.UserNameExists || p.EmailExists || p.GenderExists)
                             {
+                                if (p.NameExists)
+                                {
+                                    aolName = aolName + 1;
+                                }
+
+                                if (p.UserNameExists)
+                                {
+                                    aolUsername = aolUsername + 1;
+                                }
+
+                                if (p.EmailExists)
+                                {
+                                    aolEmail = aolEmail + 1;
+                                }
+
+                                if (p.GenderExists)
+                                {
+                                    aolGender = aolGender + 1;
+                                }
+
                                 output += columns[2] + "\t" + columns[6] + "\t" + currentDomain + "\t" + p.Name + "\t" + p.UserName + "\t" + p.Email + "\t" + p.Gender;
                                 Console.WriteLine("Output : {0}" + output);
 
