@@ -118,16 +118,16 @@ namespace ConsoleApplication1
                 var rows = ReadFile(f);
 
 
-                /**
-                FileInfo fileToDecompress = new FileInfo(filepath);
-                string newfile = Decompress(fileToDecompress);
-                Console.WriteLine("NewPath : {0}", newfile);
+            /**
+            FileInfo fileToDecompress = new FileInfo(filepath);
+            string newfile = Decompress(fileToDecompress);
+            Console.WriteLine("NewPath : {0}", newfile);
 
-                // Read the file and display it line by line.
-                System.IO.StreamReader file =
-                   new System.IO.StreamReader(newfile);
+            // Read the file and display it line by line.
+            System.IO.StreamReader file =
+               new System.IO.StreamReader(newfile);
             
-                 **/
+             **/
 
                 foreach (var line in rows)
                 {
@@ -265,8 +265,8 @@ namespace ConsoleApplication1
                 }
             }
         }
-
-
+                        
+                        
                         
                         /** Write to text file
                         using (StreamWriter sw = new StreamWriter(@"C:\data\" + sep(currentDomain) + "InOutput.txt", true))
